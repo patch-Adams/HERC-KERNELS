@@ -49,7 +49,7 @@
 #ifdef CONFIG_USA_MODEL_SGH_I577
 #define L_VAL_SCPLL_CAL_MAX	0x17 /* = 1242 MHz with 27MHz source */
 #else
-#define L_VAL_SCPLL_CAL_MAX	0x22 /* = 1836 MHz with 27MHz source */
+#define L_VAL_SCPLL_CAL_MAX	0x20 /* = 1728 MHz with 27MHz source */
 #endif
 
 
@@ -263,8 +263,6 @@ static struct clkctl_acpu_speed acpu_freq_tbl_slow[] = {
   { {1, 1}, 1620000,  ACPU_SCPLL, 0, 0, 1, 0x1E, L2(20), 1225000, 0x03006000},
   { {1, 1}, 1674000,  ACPU_SCPLL, 0, 0, 1, 0x1F, L2(20), 1250000, 0x03006000},
   { {1, 1}, 1728000,  ACPU_SCPLL, 0, 0, 1, 0x20, L2(20), 1275000, 0x03006000},
-  { {1, 1}, 1782000,  ACPU_SCPLL, 0, 0, 1, 0x21, L2(20), 1300000, 0x03006000},
-  { {1, 1}, 1836000,  ACPU_SCPLL, 0, 0, 1, 0x22, L2(20), 1300000, 0x03006000},
   { {0, 0}, 0 },
 };
 
@@ -932,7 +930,7 @@ static unsigned int __init select_freq_plan(void)
 		speed_bin = (pte_efuse >> 4) & 0xF;
 
 	if (speed_bin == 0x1) {
-		max_khz = 	;
+		max_khz = 1728000;
 		pvs = (pte_efuse >> 10) & 0x7;
 		if (pvs == 0x7)
 			pvs = (pte_efuse >> 13) & 0x7;
@@ -958,7 +956,7 @@ static unsigned int __init select_freq_plan(void)
 			break;
 		}
 	} else if (speed_bin == 0x0 ) {
-		max_khz = MAX_FREQ_LIMIT;
+		max_khz = 1728000;
 		pvs = (pte_efuse >> 10) & 0x7;
                 if (pvs == 0x7)
                         pvs = (pte_efuse >> 13) & 0x7;
