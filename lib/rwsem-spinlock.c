@@ -14,11 +14,6 @@ enum rwsem_waiter_type {
 	RWSEM_WAITING_FOR_READ
 };
 
-enum rwsem_waiter_type {
-	RWSEM_WAITING_FOR_WRITE,
-	RWSEM_WAITING_FOR_READ
-};
-
 struct rwsem_waiter {
 	struct list_head list;
 	struct task_struct *task;
@@ -83,7 +78,7 @@ __rwsem_do_wake(struct rw_semaphore *sem, int wakewrite)
 		goto out;
 	}
 
-	/* grant an infinite number of read locks to the front of the queue */
+	/* grant read locks to all queued readers. */
 	woken = 0;
 	do {
 		struct list_head *next = waiter->list.next;
@@ -240,8 +235,8 @@ int __down_write_trylock(struct rw_semaphore *sem)
 
 	raw_spin_lock_irqsave(&sem->wait_lock, flags);
 
-	if (sem->activity == 0) {
-		/* got the lock */
+	if (sem->activity == 0 && list_empty(&sem->wait_list)) {
+		/* granted */
 		sem->activity = -1;
 		ret = 1;
 	}
